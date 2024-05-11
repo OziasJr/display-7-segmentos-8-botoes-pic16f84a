@@ -1,0 +1,401 @@
+MPASM 5.87        PRATICA-3-LED-DOURADOS.ASM   4-29-2024  14:49:00         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[205]: Found directive in column 1. (list)
+                      00001 list p=16f84A
+                      00002 #include <P16F84A.INC>
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Jan 06 2020
+                      00005 ;  MPASM PIC16F84A processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2020 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      00209         LIST
+Warning[205]: Found directive in column 1. (__CONFIG)
+2007   3FF1           00003 __CONFIG _FOSC_XT & _WDTE_OFF & _PWRTE_ON & _CP_OFF
+                      00004     
+                      00005 #define     BOTAO       PORTA,4     ;   O BOTÃO ESTÁ ASSOCIADO AO PINO RA0
+                      00006     
+  00000020            00007 TEMPO1      EQU     0X20    ;   ESTAMOS CRIANDO UMA VARIÁVEL TEMPO1 E ARMAZENANDO NO ENDEREÇO HEXA DECIM
+                            AL 0X20
+  00000021            00008 TEMPO2      EQU     0X21    ;   ESTAMOS CRIANDO UMA VARIÁVEL TEMPO2 E ARMAZENANDO NO ENDEREÇO HEXA DECIM
+                            AL 0X21
+  00000022            00009 TEMPO3      EQU     0X22    ;   ESTAMOS CRIANDO UMA VARIÁVEL TEMPO3 E ARMAZENANDO NO ENDEREÇO HEXA DECIM
+                            AL 0X22
+                      00010 
+Warning[205]: Found directive in column 1. (ORG)
+                      00011 ORG 0x00
+0000   2???           00012     GOTO    INICIO
+                      00013     
+                      00014 PSECT CODE
+                      00015     
+0000                  00016 INICIO:
+0000   1683           00017     BANKSEL     TRISB       ;   SELECIONANDO O BANCO AONDE SE ENCONTRA O REGISTRADOR TRISB/RB
+0001   3000           00018     MOVLW       B'00000000'     ;   ESTOU MOVENDO NUMEROS 0 PARA O REGISTRADOR GENÉRICO W
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0002   0086           00019     MOVWF       TRISB       ;   ESTOU MOVENDO O REGISTRADOR W PARA O REGISTRADOR TRISB/RB (TODOS OS PINO
+                            S DO PORTB/RB SERÃO SAIDA)
+0003   1683           00020     BANKSEL     TRISA       ;   SELECIONANDO O BANCO AONDE SE ENCONTRA O REGISTRADOR TRISA/RA
+0004   3010           00021     MOVLW       B'00010000'     ;   ESTOU MOVENDO NUMEROS 0/1 PARA O REGISTRADOR GENÉRICO W
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0005   0085           00022     MOVWF       TRISA       ;   ESTOU MOVENDO O REGISTRADOR W PARA O REGISTRADOR TRISA/RA (OS PINOS DAS 
+                            PORTAS RA0, RA1, RA2 E RA3 SERÃO SAÍDAS E RA4 SERÁ ENTRADA)
+0006   0186           00023     CLRF        PORTB       ;   ESTOU LIMPANDO O REGISTRADOR PORTB/RB (COLOCANDO TODOS OS PINOS EM NÍVEL
+                             LÓGICO BAIXO)
+                      00024     
+0007                  00025 MAIN:
+0007   1A05           00026     BTFSC       BOTAO       ;   SE O BOTÃO FOR ZERO, ELE IRÁ PULAR A LINHA DE COMANDO, SE GUINDO PARA A 
+                            PRÓXIMA (SEGUNDA LINHA)
+0008   2???           00027     GOTO        DESLIGADA       ;   IRÁ DESVIAR A INSTRUÇÃO INDO PARA A FUNÇÃO DESLIGAR
+                      00028     
+0009   1406           00029     BSF         PORTB,0     ;   VERDE - LIGADO
+000A   1686           00030     BSF         PORTB,5     ;   VERMELHO - LIGADO
+000B   1706           00031     BSF         PORTB,6     ;   VERDE - LIGADO
+MPASM 5.87        PRATICA-3-LED-DOURADOS.ASM   4-29-2024  14:49:00         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000C   1485           00032     BSF         PORTA,1     ;   VERDE - LIGADO
+000D   1585           00033     BSF         PORTA,3     ;   VERDE - LIGADO
+000E   3015           00034     MOVLW       15          ;   MOVIMENTA O NÚMERO 15 PARA O REGISTRADOR GENÉRICO W
+000F   2???           00035     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 3,750 SEGUNDOS
+                            )
+                      00036     
+0010   1006           00037     BCF         PORTB,0     ;   DESLIGADO
+0011   3005           00038     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0012   2???           00039     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00040     
+                      00041     ;--------------------------------
+                      00042     ;   INICIO DO LOOP DA LUZ AMARELA
+                      00043     ;--------------------------------
+                      00044     
+0013   1486           00045     BSF         PORTB,1     ;   AMARELO - LIGADO
+0014   3005           00046     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0015   2???           00047     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+0016   1086           00048     BCF         PORTB,1     ;   AMARELO - DESLIGADO
+                      00049     
+0017   3005           00050     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0018   2???           00051     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00052     
+0019   1486           00053     BSF         PORTB,1     ;   AMARELO - LIGADO
+001A   3005           00054     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+001B   2???           00055     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+001C   1086           00056     BCF         PORTB,1     ;   AMARELO - DESLIGADO
+                      00057     
+001D   3005           00058     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+001E   2???           00059     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00060     
+001F   1486           00061     BSF         PORTB,1     ;   AMARELO - LIGADO
+0020   3005           00062     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0021   2???           00063     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+0022   1086           00064     BCF         PORTB,1     ;   AMARELO - DESLIGADO
+                      00065     
+0023   3005           00066     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0024   2???           00067     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00068     
+0025   1486           00069     BSF         PORTB,1     ;   AMARELO - LIGADO
+0026   3005           00070     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0027   2???           00071     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+0028   1086           00072     BCF         PORTB,1     ;   AMARELO - DESLIGADO
+                      00073     
+0029   3005           00074     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+002A   2???           00075     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+MPASM 5.87        PRATICA-3-LED-DOURADOS.ASM   4-29-2024  14:49:00         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                            )
+                      00076     
+002B   1486           00077     BSF         PORTB,1     ;   AMARELO - LIGADO
+002C   3005           00078     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+002D   2???           00079     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+002E   1086           00080     BCF         PORTB,1     ;   AMARELO - DESLIGADO
+                      00081     
+                      00082     ;-------------------------------
+                      00083     ;   FINAL DO LOOP DA LUZ AMARELA
+                      00084     ;-------------------------------
+                      00085     
+002F   1286           00086     BCF         PORTB,5     ;   VERMELHO - DESLIGADO
+0030   1306           00087     BCF         PORTB,6     ;   VERDE - DESLIGADO
+0031   1085           00088     BCF         PORTA,1     ;   VERDE - DESLIGADO
+0032   1185           00089     BCF         PORTA,3     ;   VERDE - DESLIGADO
+                      00090     
+0033   3005           00091     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0034   2???           00092     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00093     
+0035   1506           00094     BSF         PORTB,2     ;   VERMELHO - LIGADO       
+0036   1586           00095     BSF         PORTB,3     ;   VERDE - LIGADO
+0037   1786           00096     BSF         PORTB,7     ;   VERMELHO - LIGADO       
+0038   1405           00097     BSF         PORTA,0     ;   VERMELHO - LIGADO       
+0039   1505           00098     BSF         PORTA,2     ;   VERMELHO - LIGADO
+003A   3015           00099     MOVLW       15          ;   MOVIMENTA O NÚMERO 15 PARA O REGISTRADOR GENÉRICO W
+003B   2???           00100     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 3,750 SEGUNDOS
+                            )
+003C   1186           00101     BCF         PORTB,3     ;   
+                      00102     
+003D   3005           00103     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+003E   2???           00104     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00105     
+                      00106     ;--------------------------------
+                      00107     ;   INICIO DO LOOP DA LUZ AMARELA
+                      00108     ;--------------------------------
+                      00109     
+003F   1606           00110     BSF         PORTB,4     ;   AMARELO - LIGADO
+0040   3005           00111     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0041   2???           00112     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+0042   1206           00113     BCF         PORTB,4     ;   AMARELO - DESLIGADO
+                      00114     
+0043   3005           00115     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0044   2???           00116     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00117     
+0045   1606           00118     BSF         PORTB,4     ;   AMARELO - LIGADO
+0046   3005           00119     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0047   2???           00120     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+MPASM 5.87        PRATICA-3-LED-DOURADOS.ASM   4-29-2024  14:49:00         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0048   1206           00121     BCF         PORTB,4     ;   AMARELO - DESLIGADO
+0049   3005           00122     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+004A   2???           00123     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00124     
+004B   1606           00125     BSF         PORTB,4     ;   AMARELO - LIGADO
+004C   3005           00126     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+004D   2???           00127     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+004E   1206           00128     BCF         PORTB,4     ;   AMARELO - DESLIGADO
+                      00129     
+004F   3005           00130     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0050   2???           00131     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00132     
+0051   1606           00133     BSF         PORTB,4     ;   AMARELO - LIGADO
+0052   3005           00134     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0053   2???           00135     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+0054   1206           00136     BCF         PORTB,4     ;   AMARELO - DESLIGADO
+                      00137     
+0055   3005           00138     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0056   2???           00139     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00140     
+0057   1606           00141     BSF         PORTB,4     ;   AMARELO - LIGADO
+0058   3005           00142     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0059   2???           00143     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+005A   1206           00144     BCF         PORTB,4     ;   AMARELO - DESLIGADO
+                      00145     
+                      00146     ;-------------------------------
+                      00147     ;   FINAL DO LOOP DA LUZ AMARELA
+                      00148     ;-------------------------------
+                      00149     
+005B   1106           00150     BCF         PORTB,2     ;   VERMELHO - DESLIGADO    
+005C   1186           00151     BCF         PORTB,3     ;   VERDE - DESLIGADO
+005D   1386           00152     BCF         PORTB,7     ;   VERMELHO - DESLIGADO    
+005E   1005           00153     BCF         PORTA,0     ;   VERMELHO - DESLIGADO    
+005F   1105           00154     BCF         PORTA,2     ;   VERMELHO - DESLIGADO
+                      00155     
+0060   3005           00156     MOVLW       5           ;   MOVIMENTA O NÚMERO 5 PARA O REGISTRADOR GENÉRICO W
+0061   2???           00157     CALL        ATRASO      ;   ROTINA DE ATRASO E PEGA O NUMERO 15 COMO PARAMETRO (SENDO 1,250 SEGUNDOS
+                            )
+                      00158     
+0062   2???           00159     GOTO        MAIN        ;   RETORNA A FUNÇÃO PRINCIPAL PARA REPETIR A ROTINA
+                      00160     
+0063                  00161 DESLIGADA:
+0063   1283           00162     BANKSEL     PORTB       ;   ACESSAMOS O BANCO DE MEMÓRIA DA PORTB/RB
+0064   0186           00163     CLRF        PORTB       ;   E LIMPAMOS (APAGAMOS) OS LEDS
+0065   1283           00164     BANKSEL     PORTA       ;   ACESSAMOS O BANCO DE MEMÓRIA DA PORTA/RA
+0066   0185           00165     CLRF        PORTA       ;   E LIMPAMOS (APAGAMOS) OS LEDS
+0067   2???           00166     GOTO        MAIN        ;   RETORNANDO PARA A ROTINA PRINCIPAL
+MPASM 5.87        PRATICA-3-LED-DOURADOS.ASM   4-29-2024  14:49:00         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00167     
+0068                  00168 ATRASO:
+0068   00A2           00169     MOVWF       TEMPO3      ;
+                      00170     
+0069                  00171 DELAY0:
+Warning[202]: Argument out of range.  Least significant bits used.
+0069   3050           00172     MOVLW       250     ;   CARREGA O VALOR 250 PARA O REGISTRADOR GENÉRICO W
+006A   00A1           00173     MOVWF       TEMPO2      ;   ARMAZENA O VALOR DO RESGISTRADOR W EM TEMPO2
+                      00174 
+006B                  00175 DELAY1:
+Warning[202]: Argument out of range.  Least significant bits used.
+006B   3000           00176     MOVLW       200     ;   CARREGA O VALOR 200 PARA O REGISTRADOR GENÉRICO W
+006C   00A0           00177     MOVWF       TEMPO1      ;   ARMAZENA O VALOR DO REGISTRADOR W EM TEMPO1
+                      00178     
+006D                  00179 DELAY2:
+006D   0000           00180     NOP     ;   ATRASO DE UM CICLO DE CLOCK
+006E   0000           00181     NOP     ;   ATRASO DE UM CICLO DE CLOCK
+006F   0BA0           00182     DECFSZ      TEMPO1,F        ;   DECREMENTA TEMPO1 E VERIFICA SE É ZERO
+0070   2???           00183     GOTO        DELAY2      ;   SE NÃO FOR ZERO, CONTINUE O ATRASO
+0071   0BA1           00184     DECFSZ      TEMPO2,F        ;   DECREMENTA TEMPO2 E VERIFICA SE É ZERO
+0072   2???           00185     GOTO        DELAY1      ;   SE NÃO FOR ZERO, CONTINUE O ATRASO
+0073   0BA2           00186     DECFSZ      TEMPO3,F        ;   DECREMENTA TEMPO3 E VERIFICA SE É ZERO
+0074   2???           00187     GOTO        DELAY0      ;   SE NÃO FOR ZERO, CONTINUE O ATRASO
+0075   0008           00188     RETURN      ;   RETORNA DA SUB ROTINA DE ATRASO
+                      00189     
+3FF1                  00190     END     ;   FIM DO CÓDIGO
+MPASM 5.87        PRATICA-3-LED-DOURADOS.ASM   4-29-2024  14:49:00         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ATRASO                            00000068
+BOTAO                             PORTA,4
+C                                 00000000
+DC                                00000001
+DELAY0                            00000069
+DELAY1                            0000006B
+DELAY2                            0000006D
+DESLIGADA                         00000063
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INICIO                            00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+MAIN                              00000007
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+MPASM 5.87        PRATICA-3-LED-DOURADOS.ASM   4-29-2024  14:49:00         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RP0                               00000005
+RP1                               00000006
+STATUS                            00000003
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TEMPO1                            00000020
+TEMPO2                            00000021
+TEMPO3                            00000022
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CONFIG                           00002007
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_DEVID1                           00002006
+_FOSC_EXTRC                       00003FFF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_XT                          00003FFD
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+MPASM 5.87        PRATICA-3-LED-DOURADOS.ASM   4-29-2024  14:49:00         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84A                          00000001
+
+Errors   :     0
+Warnings :     5 reported,     0 suppressed
+Messages :     2 reported,     0 suppressed
+
+
